@@ -1,28 +1,24 @@
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Iterator;
-import java.util.Objects;
+import java.util.*;
 
 public class DeleteInvalidBookMarksApplication {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
         String fileName = "bookmarks_testing.json";
+        List<String> searchStrings = new ArrayList<>();
+        searchStrings.add("This video was deleted.");
+        searchStrings.add("Video was deleted");
 
         ParseBookMarks parseBookMarks = new ParseBookMarks();
-        //parseBookMarks.parseJsonObject();
 
-        String contents = new String((Files.readAllBytes(Paths.get(fileName))));
-        JSONObject jsonObject = new JSONObject(contents);
+        parseBookMarks.parseJsonObject(fileName);
 
 
         UrlValidator urlValidator = new UrlValidator();
-        System.out.println(urlValidator.isUrlValid("http://google.pl/"));
+
+        //System.out.println("to sie wykonuje " + urlValidator.isUrlValid("http://google.pl", searchStrings));
+        //System.out.println("to sie wykonuje " + urlValidator.isUrlValid("http://google.pl/", Collections.emptyList()));
+
 
 
     }

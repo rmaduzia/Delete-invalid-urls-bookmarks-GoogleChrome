@@ -3,21 +3,33 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 
 public class ParseBookMarks {
 
-    public void parseJsonObject() {
+    public void parseJsonObject(String filePath) {
         try {
-            String filePath = "bookmarks_testing.json";
             JSONObject jsonObject = getJsonObject(filePath);
             JSONObject root = (JSONObject) jsonObject.get("roots");
             for (String string : (Set<String>) root.keySet()) {
                 JSONObject newJsonObject = (JSONObject) root.get(string);
                 printChildren(newJsonObject);
             }
-            System.out.println("1" + jsonObject);
+            System.out.println(jsonObject.toJSONString().replaceAll("\\\\",""));
+
+            try (FileWriter file = new FileWriter("BookMarksOutput.json")) {
+
+                file.write(jsonObject.toJSONString().replaceAll("\\\\",""));
+                file.flush();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -29,17 +41,21 @@ public class ParseBookMarks {
     }
 
     private void printUrls(JSONArray children) {
+        UrlValidator urlValidator = new UrlValidator();
+
         for (int i=0; i<children.size(); i++){
             JSONObject jsonObject = (JSONObject) children.get(i);
             printChildren(jsonObject);
             String url = (String) jsonObject.get("url");
             if (Objects.nonNull(url)) {
-                System.out.println(url);
-                if (url.contains("https://sekurak.pl/")){
-                    System.out.println("tak");
-                    children.remove(i);
+                boolean result = urlValidator.isUrlValid(url, Collections.emptyList());
+                //System.out.println(result + "  " + url);
 
+                if (!result){
+                    System.out.println("deleting " + url);
+                    children.remove(i);
                 }
+
             }
         }
     }
