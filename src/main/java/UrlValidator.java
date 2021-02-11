@@ -16,13 +16,18 @@ public class UrlValidator {
 
         try {
             URL siteURL = new URL(website);
+            //HttpURLConnection.setFollowRedirects(false);
             HttpURLConnection connection = (HttpURLConnection) siteURL.openConnection();
             connection.setRequestMethod("GET");
             connection.setConnectTimeout(3000);
             connection.setInstanceFollowRedirects(false);
+            //connection.setRequestProperty("User-Agent", "Mozilla/5.0...");
+
             connection.connect();
 
             code = connection.getResponseCode();
+            System.out.println(code + "   " + website);
+
 
             BufferedReader br = new BufferedReader(new InputStreamReader((connection.getInputStream())));
             StringBuilder sb = new StringBuilder();
@@ -31,7 +36,7 @@ public class UrlValidator {
                 sb.append(output);
             }
 
-            if (code == 200) {
+            if (code == 200  || code == 302 || code == 301) {
                 if (isLookingForString) {
                     isValid = checkIsUrlBodyContentValid(searchStrings, sb.toString());
                 }

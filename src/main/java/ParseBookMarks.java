@@ -1,3 +1,5 @@
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -5,11 +7,13 @@ import org.json.simple.parser.JSONParser;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 
+
+
 public class ParseBookMarks {
+
 
     public void parseJsonObject(String filePath) {
         try {
@@ -21,14 +25,8 @@ public class ParseBookMarks {
             }
             System.out.println(jsonObject.toJSONString().replaceAll("\\\\",""));
 
-            try (FileWriter file = new FileWriter("BookMarksOutput.json")) {
 
-                file.write(jsonObject.toJSONString().replaceAll("\\\\",""));
-                file.flush();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            writeJsonToFile(jsonObject);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -48,7 +46,7 @@ public class ParseBookMarks {
             printChildren(jsonObject);
             String url = (String) jsonObject.get("url");
             if (Objects.nonNull(url)) {
-                boolean result = urlValidator.isUrlValid(url, Collections.emptyList());
+                boolean result = urlValidator.isUrlValid(url, ConfigApp.SEARCH_STRING_IN_BODY);
                 //System.out.println(result + "  " + url);
 
                 if (!result){
@@ -57,6 +55,19 @@ public class ParseBookMarks {
                 }
 
             }
+        }
+    }
+
+    private void writeJsonToFile(JSONObject jsonObject){
+
+        try (FileWriter file = new FileWriter(ConfigApp.OUTPUT_FILE_NAME)) {
+
+            ObjectMapper myObjectMapper = new ObjectMapper();
+            myObjectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+            myObjectMapper.writeValue(file, jsonObject);
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

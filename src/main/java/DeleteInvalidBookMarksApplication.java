@@ -1,26 +1,15 @@
-import java.util.*;
-
 public class DeleteInvalidBookMarksApplication {
 
     public static void main(String[] args) {
 
-        String fileName = "bookmarks_testing.json";
-        List<String> searchStrings = new ArrayList<>();
-        searchStrings.add("This video was deleted.");
-        searchStrings.add("Video was deleted");
+        ConfigApp.SEARCH_STRING_IN_BODY.add("This video was deleted.");
+        ConfigApp.SEARCH_STRING_IN_BODY.add("Video was deleted");
+        ConfigApp.SEARCH_STRING_IN_BODY.add("Video was deleted.");
+        ConfigApp.SEARCH_STRING_IN_BODY.add("Video has been flagged for verification in accordance with our trust and safety policy");
+        ConfigApp.SEARCH_STRING_IN_BODY.add("Film Nie Jest Już Dostępny.");
 
         ParseBookMarks parseBookMarks = new ParseBookMarks();
-
-        parseBookMarks.parseJsonObject(fileName);
-
-
-        UrlValidator urlValidator = new UrlValidator();
-
-        //System.out.println("to sie wykonuje " + urlValidator.isUrlValid("http://google.pl", searchStrings));
-        //System.out.println("to sie wykonuje " + urlValidator.isUrlValid("http://google.pl/", Collections.emptyList()));
-
-
-
+        parseBookMarks.parseJsonObject(ConfigApp.INPUT_FILE_NAME);
     }
 }
 
