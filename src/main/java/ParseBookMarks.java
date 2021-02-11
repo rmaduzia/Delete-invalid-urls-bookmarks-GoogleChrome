@@ -47,8 +47,6 @@ public class ParseBookMarks {
             String url = (String) jsonObject.get("url");
             if (Objects.nonNull(url)) {
                 boolean result = urlValidator.isUrlValid(url, ConfigApp.SEARCH_STRING_IN_BODY);
-                //System.out.println(result + "  " + url);
-
                 if (!result){
                     System.out.println("deleting " + url);
                     children.remove(i);

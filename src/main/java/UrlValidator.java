@@ -8,10 +8,9 @@ public class UrlValidator {
 
     public boolean isValid;
 
-
     public boolean isUrlValid(String website, List<String> searchStrings) {
-        int code;
 
+        int code;
         boolean isLookingForString = !searchStrings.isEmpty();
 
         try {
@@ -21,8 +20,6 @@ public class UrlValidator {
             connection.setRequestMethod("GET");
             connection.setConnectTimeout(3000);
             connection.setInstanceFollowRedirects(false);
-            //connection.setRequestProperty("User-Agent", "Mozilla/5.0...");
-
             connection.connect();
 
             code = connection.getResponseCode();
