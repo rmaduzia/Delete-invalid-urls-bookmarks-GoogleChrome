@@ -6,13 +6,12 @@ import java.util.List;
 
 public class UrlValidator {
 
-    public boolean isValid;
-
     public boolean isUrlValid(String website, List<String> searchStrings) {
 
         int code;
         boolean isLookingForString = !searchStrings.isEmpty();
 
+        boolean isValid = false;
         try {
             URL siteURL = new URL(website);
             //HttpURLConnection.setFollowRedirects(false);
@@ -37,13 +36,11 @@ public class UrlValidator {
                 if (isLookingForString) {
                     isValid = checkIsUrlBodyContentValid(searchStrings, sb.toString());
                 }
-                isValid = true;
-            } else {
-                isValid = false;
             }
         } catch (Exception e) {
-            isValid = false;
+            e.printStackTrace();
         }
+
         return isValid;
     }
 
